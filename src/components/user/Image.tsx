@@ -11,6 +11,8 @@ import {
 import { IconUpload } from "@tabler/icons-react";
 import { useNode } from "@craftjs/core";
 import { getSelectedStyle } from "./utils";
+import { ResizeHandle } from './ResizeHandle';
+import React from 'react';
 
 export const ImageSettings = () => {
   const {
@@ -83,18 +85,48 @@ export const Image = ({
     connectors: { connect, drag },
     selected,
     imageUrl,
+    actions: { setProp },
+    id,
   } = useNode((node) => ({
     selected: node.events.selected,
     imageUrl: node.data.props.imageUrl,
+    id: node.id,
   }));
+
+  const handleResize = (newWidth: number, newHeight: number, newLeft: number, newTop: number) => {
+    setProp((props: any) => {
+      props.width = newWidth;
+      props.height = newHeight;
+      props.style = {
+        ...props.style,
+        transform: `translate(${newLeft - initialLeft}px, ${newTop - initialTop}px)`,
+      };
+    });
+  };
+
+  // Store initial position on mount
+  const [initialLeft, setInitialLeft] = React.useState(0);
+  const [initialTop, setInitialTop] = React.useState(0);
+
+  React.useEffect(() => {
+    const element = document.getElementById(id);
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      setInitialLeft(rect.left);
+      setInitialTop(rect.top);
+    }
+  }, [id]);
 
   return (
     <div
+      id={id}
       ref={(ref: HTMLDivElement | null) => {
         if (ref) {
           connect(drag(ref));
         }
       }}
+      className="relative w-fit h-fit"
+      style={style}
     >
       <Paper
         shadow="none"
@@ -104,7 +136,6 @@ export const Image = ({
           height,
           position: "relative",
           overflow: "hidden",
-          ...style,
           ...getSelectedStyle(selected),
         }}
       >
@@ -112,28 +143,15 @@ export const Image = ({
           <MantineImage
             src={imageUrl || initialImageUrl}
             alt={alt}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
+            className="w-full h-full object-cover"
           />
         ) : (
-          <div
-            style={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "#f3f4f6",
-              color: "#9ca3af",
-            }}
-          >
+          <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
             Drop image here
           </div>
         )}
       </Paper>
+      {selected && <ResizeHandle onResize={handleResize} />}
     </div>
   );
 };
@@ -144,6 +162,7 @@ Image.craft = {
     width: 400,
     height: 400,
     alt: "Image",
+    style: {},
   },
   related: {
     settings: ImageSettings,

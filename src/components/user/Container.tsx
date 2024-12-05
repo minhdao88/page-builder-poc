@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useNode } from "@craftjs/core";
+import { Node, useNode } from "@craftjs/core";
 import React from "react";
 import { getSelectedStyle } from "./utils";
 import { ColorInput, NumberInput, Paper, Stack } from "@mantine/core";
@@ -8,6 +8,8 @@ interface ContainerProps {
   background?: string;
   padding?: number;
   children?: React.ReactNode;
+  style?: React.CSSProperties;
+  editable?: boolean;
 }
 
 const ContainerSettings = () => {
@@ -25,7 +27,9 @@ const ContainerSettings = () => {
       <ColorInput
         label="Background"
         value={background}
-        onChange={(color) => setProp((props: any) => (props.background = color))}
+        onChange={(color) =>
+          setProp((props: any) => (props.background = color))
+        }
       />
       <NumberInput
         label="Padding"
@@ -42,6 +46,7 @@ export const Container = ({
   background = "transparent",
   padding = 20,
   children,
+  editable = true,
 }: ContainerProps) => {
   const {
     connectors: { connect, drag },
@@ -53,14 +58,17 @@ export const Container = ({
   return (
     <Paper
       ref={(ref: HTMLDivElement | null) => {
-        if (ref) connect(drag(ref));
+        if (ref) {
+          connect(drag(ref));
+        }
       }}
       shadow="none"
+      radius="none"
       style={{
         background,
         padding,
         position: "relative",
-        ...getSelectedStyle(selected),
+        ...getSelectedStyle(editable && selected),
       }}
     >
       <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
@@ -74,9 +82,7 @@ Container.craft = {
   props: {
     background: "transparent",
     padding: 20,
-  },
-  rules: {
-    canDrag: () => true,
+    editable: true,
   },
   related: {
     settings: ContainerSettings,

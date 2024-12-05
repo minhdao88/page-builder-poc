@@ -69,9 +69,9 @@ const PageEditor = () => {
           <Grid.Col span={2} style={{ borderRight: "1px solid #e9ecef" }}>
             <Toolbox />
           </Grid.Col>
-          <Grid.Col span={8} style={{ height: "100%" }} p="md">
-            <Frame data={json !== undefined ? json : undefined}>
-              <Element is={Container} padding={5} canvas></Element>
+          <Grid.Col span={8} style={{ height: "100%" }} p="md" data-cy="craftjs-editor">
+            <Frame data={json}>
+              <Element is={Container} padding={5} canvas editable={false} />
             </Frame>
           </Grid.Col>
           <Grid.Col
