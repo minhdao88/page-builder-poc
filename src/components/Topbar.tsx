@@ -1,12 +1,9 @@
 import React from "react";
 import { Switch, Button, Flex, Group, Title } from "@mantine/core";
 import { useEditor } from "@craftjs/core";
-import {
-  IconResize,
-  IconDeviceFloppy,
-} from "@tabler/icons-react";
+import { IconResize, IconDeviceFloppy } from "@tabler/icons-react";
 
-export const Topbar = () => {
+export const Topbar = ({ onPreview }: { onPreview: () => void }) => {
   const [saved, setSaved] = React.useState(false);
   const { actions, query, enabled } = useEditor((state) => ({
     enabled: state.options.enabled,
@@ -35,8 +32,8 @@ export const Topbar = () => {
           }
           label="Enable editing"
         />
+        <Button onClick={onPreview}>Preview</Button>
         <Button
-          size="sm"
           leftSection={<IconDeviceFloppy size={16} />}
           onClick={handleSave}
         >

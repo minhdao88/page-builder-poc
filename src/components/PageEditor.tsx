@@ -15,10 +15,13 @@ import { Hero } from "./user/Hero";
 import { Image } from "./user/Image";
 import { FAQ } from "./user/FAQ";
 import React, { useState, useEffect } from "react";
+import { useDisclosure } from "@mantine/hooks";
+import { PreviewModal } from "./PreviewModal";
 
 const PageEditor = () => {
   const [json, setJson] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const [opened, { open, close }] = useDisclosure(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("page-editor");
@@ -49,7 +52,7 @@ const PageEditor = () => {
           FAQ,
         }}
       >
-        <Topbar />
+        <Topbar onPreview={open} />
         <Divider />
         <Grid
           grow
@@ -79,6 +82,7 @@ const PageEditor = () => {
             <SettingsPanel />
           </Grid.Col>
         </Grid>
+        <PreviewModal opened={opened} onClose={close} />
       </Editor>
     </div>
   );
