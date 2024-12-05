@@ -12,16 +12,26 @@ import { SettingsPanel } from "./SettingsPanel";
 import { Header } from "./user/Header";
 import { Footer } from "./user/Footer";
 import { Hero } from "./user/Hero";
-import { Image, } from "./user/Image";
+import { Image } from "./user/Image";
 import { FAQ } from "./user/FAQ";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const PageEditor = () => {
-  const [json] = React.useState(() => {
+  const [json, setJson] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
     const saved = localStorage.getItem("page-editor");
-    return saved ? JSON.parse(saved) : null;
-  });
-  
+    if (saved) {
+      setJson(JSON.parse(saved));
+    }
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) {
+    return null; // or a loading spinner
+  }
+
   return (
     <div className="flex flex-col h-screen">
       <Editor
@@ -57,7 +67,7 @@ const PageEditor = () => {
             <Toolbox />
           </Grid.Col>
           <Grid.Col span={8} style={{ height: "100%" }} p="md">
-            <Frame json={json}>
+            <Frame data={json !== undefined ? json : undefined}>
               <Element is={Container} padding={5} canvas></Element>
             </Frame>
           </Grid.Col>
