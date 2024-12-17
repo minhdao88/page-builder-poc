@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Paper,
   Image as MantineImage,
   Stack,
   FileButton,
@@ -10,9 +9,8 @@ import {
 } from "@mantine/core";
 import { IconUpload } from "@tabler/icons-react";
 import { useNode } from "@craftjs/core";
-import { getSelectedStyle } from "./utils";
-import { ResizeHandle } from './ResizeHandle';
-import React from 'react';
+import React from "react";
+import { ResizeableWrapper } from "../common/ResizeableWrapper";
 
 export const ImageSettings = () => {
   const {
@@ -68,103 +66,63 @@ export const ImageSettings = () => {
 
 interface ImageProps {
   imageUrl?: string;
+  alt?: string;
   width?: number;
   height?: number;
-  alt?: string;
   style?: React.CSSProperties;
 }
 
 export const Image = ({
-  imageUrl: initialImageUrl = "",
-  width = 400,
-  height = 400,
-  alt = "Image",
+  imageUrl,
+  alt,
+  width = 200,
+  height = 200,
   style = {},
 }: ImageProps) => {
-  const {
-    connectors: { connect, drag },
-    selected,
-    imageUrl,
-    actions: { setProp },
-    id,
-  } = useNode((node) => ({
-    selected: node.events.selected,
-    imageUrl: node.data.props.imageUrl,
-    id: node.id,
-  }));
-
-  const handleResize = (newWidth: number, newHeight: number, newLeft: number, newTop: number) => {
-    setProp((props: any) => {
-      props.width = newWidth;
-      props.height = newHeight;
-      props.style = {
-        ...props.style,
-        transform: `translate(${newLeft - initialLeft}px, ${newTop - initialTop}px)`,
-      };
-    });
-  };
-
-  // Store initial position on mount
-  const [initialLeft, setInitialLeft] = React.useState(0);
-  const [initialTop, setInitialTop] = React.useState(0);
-
-  React.useEffect(() => {
-    const element = document.getElementById(id);
-    if (element) {
-      const rect = element.getBoundingClientRect();
-      setInitialLeft(rect.left);
-      setInitialTop(rect.top);
-    }
-  }, [id]);
-
   return (
-    <div
-      id={id}
-      ref={(ref: HTMLDivElement | null) => {
-        if (ref) {
-          connect(drag(ref));
-        }
-      }}
-      className="relative w-fit h-fit"
-      style={style}
-    >
-      <Paper
-        shadow="none"
-        radius="none"
+    <ResizeableWrapper width={width} height={height} style={style}>
+      <MantineImage
+        src={imageUrl}
+        alt={alt}
         style={{
-          width,
-          height,
-          position: "relative",
-          overflow: "hidden",
-          ...getSelectedStyle(selected),
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
         }}
-      >
-        {(imageUrl || initialImageUrl) ? (
-          <MantineImage
-            src={imageUrl || initialImageUrl}
-            alt={alt}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
-            Drop image here
-          </div>
-        )}
-      </Paper>
-      {selected && <ResizeHandle onResize={handleResize} />}
-    </div>
+      />
+    </ResizeableWrapper>
   );
 };
 
 Image.craft = {
   props: {
-    imageUrl: "",
-    width: 400,
-    height: 400,
-    alt: "Image",
+    imageUrl: "https://placehold.co/400",
+    alt: "Random image",
+    width: 200,
+    height: 200,
     style: {},
+    bounds: undefined,
   },
   related: {
     settings: ImageSettings,
+  },
+};
+
+Image.craft = {
+  props: {
+    imageUrl: "https://placehold.co/400",
+    alt: "Random image",
+    width: 200,
+    height: 200,
+    style: {},
+    bounds: undefined,
+  },
+  related: {
+    settings: ImageSettings,
+  },
+  rules: {
+    canDrag: () => {
+      return false;
+    },
   },
 };

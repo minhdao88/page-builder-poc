@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Node, useNode } from "@craftjs/core";
+import { useNode } from "@craftjs/core";
 import React from "react";
 import { getSelectedStyle } from "./utils";
 import { ColorInput, NumberInput, Paper, Stack } from "@mantine/core";

@@ -12,15 +12,13 @@ import {
 import { Text } from "./Text";
 import { Button } from "./Button";
 import { Image, ImageSettings } from "./Image";
-import { getSelectedStyle } from "./utils";
+import { ResizeableWrapper } from "../common/ResizeableWrapper";
 
 export const Hero = ({
   title = "Welcome to our platform",
   description = "This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.",
   buttonText = "Learn more",
   buttonColor = "blue",
-  background = "#f8f9fa",
-  padding = 80,
   imageUrl = "",
   imagePosition = "right",
 }: {
@@ -33,26 +31,8 @@ export const Hero = ({
   imageUrl?: string;
   imagePosition?: "left" | "right";
 }) => {
-  const {
-    connectors: { connect, drag },
-    selected,
-  } = useNode((node) => ({
-    selected: node.events.selected,
-  }));
-
   return (
-    <div
-      style={{
-        background,
-        padding: `${padding}px 0`,
-        ...getSelectedStyle(selected),
-      }}
-      ref={(ref: HTMLElement | null) => {
-        if (ref) {
-          connect(drag(ref));
-        }
-      }}
-    >
+    <ResizeableWrapper>
       <Container size="lg">
         <div
           style={{
@@ -65,7 +45,6 @@ export const Hero = ({
           <Stack style={{ flex: 1 }} gap="xl">
             <Element
               is={Text}
-              order={1}
               fontWeight={700}
               fontSize={32}
               id="title"
@@ -106,7 +85,7 @@ export const Hero = ({
             ) : (
               <Element
                 is={Image}
-                imageUrl={'https://placehold.co/400'}
+                imageUrl={"https://placehold.co/400"}
                 alt="Hero"
                 id="image"
                 canvas
@@ -116,7 +95,7 @@ export const Hero = ({
           </div>
         </div>
       </Container>
-    </div>
+    </ResizeableWrapper>
   );
 };
 const HeroSettings = () => {

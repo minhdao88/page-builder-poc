@@ -135,7 +135,7 @@ export const Toolbox = () => {
               label="Text"
               ref={(ref: HTMLDivElement | null) => {
                 if (ref) {
-                  connectors.create(ref, <Text>Hello world</Text>);
+                  connectors.create(ref, <Text text='Hello world'/>);
                 }
               }}
             />

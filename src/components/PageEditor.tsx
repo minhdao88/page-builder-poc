@@ -1,6 +1,6 @@
 "use client";
 
-import { Divider, Grid } from "@mantine/core";
+import { Divider, Grid, Box } from "@mantine/core";
 import { Topbar } from "./Topbar";
 import { Toolbox } from "./Toolbox";
 import { CardBottom, CardTop, EditableCard } from "./user/Card";
@@ -69,15 +69,17 @@ const PageEditor = () => {
           <Grid.Col span={2} style={{ borderRight: "1px solid #e9ecef" }}>
             <Toolbox />
           </Grid.Col>
-          <Grid.Col span={8} style={{ height: "100%" }} p="md" data-cy="craftjs-editor">
-            <Frame data={json}>
-              <Element is={Container} padding={5} canvas editable={false} />
-            </Frame>
+          <Grid.Col span={8} style={{ height: "100%" }} p="md">
+            <Box id="craftjs-editor" style={{ height: "100%" }}>
+              <Frame data={json}>
+                <Element is={Container} padding={5} canvas editable={false} />
+              </Frame>
+            </Box>
           </Grid.Col>
           <Grid.Col
             span={2}
             p="sm"
-            style={{ borderLeft: "1px solid #e9ecef", height: "100%" }}
+            style={{ borderLeft: "1px solid #e9ecef", height: "100%", flexShrink: 0 }}
           >
             <SettingsPanel />
           </Grid.Col>

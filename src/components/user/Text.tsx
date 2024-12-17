@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNode } from "@craftjs/core";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ContentEditable from "react-contenteditable";
 import { TextInput, Select, Stack } from "@mantine/core";
-import { getSelectedStyle } from './utils';
-import { ResizeHandle } from './ResizeHandle';
+import { ResizeableWrapper } from "../common/ResizeableWrapper";
 
 interface TextProps {
   text: string;
@@ -13,6 +12,7 @@ interface TextProps {
   width?: number;
   height?: number;
   style?: React.CSSProperties;
+  bounds?: string | HTMLElement;
 }
 
 export const Text = ({
@@ -24,86 +24,33 @@ export const Text = ({
   style = {},
 }: TextProps) => {
   const {
-    connectors: { connect, drag },
-    hasSelectedNode,
-    selected,
     actions: { setProp },
-    id,
   } = useNode((state) => ({
-    hasSelectedNode: state.events.selected,
     selected: state.events.selected,
-    id: state.id,
   }));
 
   const [editable, setEditable] = useState(false);
-  const [initialLeft, setInitialLeft] = React.useState(0);
-  const [initialTop, setInitialTop] = React.useState(0);
-
-  useEffect(() => {
-    if (!hasSelectedNode) {
-      setEditable(false);
-    }
-  }, [hasSelectedNode]);
-
-  React.useEffect(() => {
-    const element = document.getElementById(id);
-    if (element) {
-      const rect = element.getBoundingClientRect();
-      setInitialLeft(rect.left);
-      setInitialTop(rect.top);
-    }
-  }, [id]);
-
-  const handleResize = (newWidth: number, newHeight: number, newLeft: number, newTop: number) => {
-    setProp((props: any) => {
-      props.width = newWidth;
-      props.height = newHeight;
-      props.style = {
-        ...props.style,
-        transform: `translate(${newLeft - initialLeft}px, ${newTop - initialTop}px)`,
-      };
-    });
-  };
 
   return (
-    <div
-      id={id}
-      ref={(ref: HTMLDivElement | null) => {
-        if (ref) {
-          connect(drag(ref));
-        }
-      }}
-      className="relative w-fit h-fit"
-      style={style}
-    >
-      <div
-        style={{
-          width,
-          height,
-          position: "relative",
-          ...getSelectedStyle(selected),
+    <ResizeableWrapper width={width} height={height} style={style}>
+      <ContentEditable
+        disabled={!editable}
+        html={text}
+        style={{ 
+          fontSize: `${fontSize}px`, 
+          fontWeight,
+          width: '100%',
+          height: '100%',
         }}
+        onChange={e => 
+          setProp((props: any) => 
+            props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")  
+          )
+        } 
+        tagName="p"
         onClick={() => setEditable(true)}
-      >
-        <ContentEditable
-          disabled={!editable}
-          html={text}
-          style={{ 
-            fontSize: `${fontSize}px`, 
-            fontWeight,
-            width: '100%',
-            height: '100%',
-          }}
-          onChange={e => 
-            setProp((props: any) => 
-              props.text = e.target.value.replace(/<\/?[^>]+(>|$)/g, "")  
-            )
-          } 
-          tagName="p"
-        />
-      </div>
-      {selected && <ResizeHandle onResize={handleResize} />}
-    </div>
+      />
+    </ResizeableWrapper>
   );
 };
 
@@ -157,5 +104,10 @@ Text.craft = {
   },
   related: {
     settings: TextSettings,
+  },
+  rules: {
+    canDrag: () => {
+      return false;
+    },
   },
 };

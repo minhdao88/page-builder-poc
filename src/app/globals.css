@@ -37,28 +37,9 @@ body {
   font-size: 0.875rem;
 }
 
-/* Add these styles for the resize handles */
-.react-resizable {
-  position: relative;
-}
+
 
 .react-resizable-handle {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: #1c7ed6;
-  border-radius: 50%;
-  z-index: 999;
+  display: none;
 }
 
-/* Optional: Add a border when selected */
-.react-resizable::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 2px solid #1c7ed6;
-  pointer-events: none;
-}

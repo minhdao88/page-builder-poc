@@ -8,8 +8,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useNode } from "@craftjs/core";
-import { getSelectedStyle } from "./utils";
-import { ResizeHandle } from './ResizeHandle';
+import { ResizeableWrapper } from "../common/ResizeableWrapper";
 
 interface ButtonProps {
   width?: number;
@@ -19,79 +18,22 @@ interface ButtonProps {
   size?: string;
   children?: React.ReactNode;
   style?: React.CSSProperties;
+  bounds?: string | HTMLElement;
 }
 
-export const Button = ({
-  width = 120,
-  height = 40,
-  style = {},
-  ...props
-}: ButtonProps) => {
-  const {
-    connectors: { connect, drag },
-    selected,
-    actions: { setProp },
-    id,
-  } = useNode((node) => ({
-    selected: node.events.selected,
-    id: node.id,
-  }));
-
-  const [initialLeft, setInitialLeft] = React.useState(0);
-  const [initialTop, setInitialTop] = React.useState(0);
-
-  React.useEffect(() => {
-    const element = document.getElementById(id);
-    if (element) {
-      const rect = element.getBoundingClientRect();
-      setInitialLeft(rect.left);
-      setInitialTop(rect.top);
-    }
-  }, [id]);
-
-  const handleResize = (newWidth: number, newHeight: number, newLeft: number, newTop: number) => {
-    setProp((props: any) => {
-      props.width = newWidth;
-      props.height = newHeight;
-      props.style = {
-        ...props.style,
-        transform: `translate(${newLeft - initialLeft}px, ${newTop - initialTop}px)`,
-      };
-    });
-  };
-
+export const Button = ({ width, height, style, ...props }: ButtonProps) => {
   return (
-    <div
-      id={id}
-      ref={(ref: HTMLDivElement | null) => {
-        if (ref) {
-          connect(drag(ref));
-        }
-      }}
-      className="relative w-fit h-fit"
-      style={style}
-    >
-      <div
+    <ResizeableWrapper width={width} height={height} style={style}>
+      <MantineButton
+        {...props}
         style={{
-          width,
-          height,
-          position: "relative",
-          ...getSelectedStyle(selected),
+          width: '100%',
+          height: '100%',
         }}
       >
-        <MantineButton
-          {...props}
-          style={{
-            width: '100%',
-            height: '100%',
-            position: "relative",
-          }}
-        >
-          {props.children}
-        </MantineButton>
-      </div>
-      {selected && <ResizeHandle onResize={handleResize} />}
-    </div>
+        {props.children}
+      </MantineButton>
+    </ResizeableWrapper>
   );
 };
 
@@ -150,7 +92,7 @@ const ButtonSettings = () => {
 
 Button.craft = {
   props: {
-    width: 120,
+    width: 200,
     height: 40,
     style: {},
     color: "",
@@ -160,5 +102,10 @@ Button.craft = {
   },
   related: {
     settings: ButtonSettings,
+  },
+  rules: {
+    canDrag: () => {
+      return false;
+    },
   },
 };
