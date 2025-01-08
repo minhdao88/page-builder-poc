@@ -7,8 +7,8 @@ import {
   NumberInput,
 } from "@mantine/core";
 import { useNode } from "@craftjs/core";
-import { Accordion, Paper, Stack } from "@mantine/core";
-import { getSelectedStyle } from "./utils";
+import { Accordion, Stack } from "@mantine/core";
+import { ResizeableWrapper } from "../common/ResizeableWrapper";
 
 interface FAQItem {
   question: string;
@@ -98,29 +98,9 @@ export const FAQ = ({
   background = "transparent",
   padding = 20,
 }: FAQProps) => {
-  const {
-    connectors: { connect, drag },
-    selected,
-  } = useNode((node) => ({
-    selected: node.events.selected,
-  }));
 
   return (
-    <Paper
-      ref={(ref: HTMLDivElement | null) => {
-        if (ref) {
-          connect(drag(ref));
-        }
-      }}
-      shadow="none"
-      radius="none"
-      style={{
-        background,
-        padding,
-        position: "relative",
-        ...getSelectedStyle(selected),
-      }}
-    >
+    <ResizeableWrapper style={{ padding: padding, background: background }}>
       <Accordion variant="separated">
         {items.map((item, index) => (
           <Accordion.Item key={index} value={`item-${index}`}>
@@ -129,7 +109,7 @@ export const FAQ = ({
           </Accordion.Item>
         ))}
       </Accordion>
-    </Paper>
+    </ResizeableWrapper>
   );
 };
 

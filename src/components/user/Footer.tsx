@@ -8,8 +8,8 @@ import {
   Stack,
 } from "@mantine/core";
 import React from "react";
-import { getSelectedStyle } from "./utils";
 import { Text } from "./Text";
+import { ResizeableWrapper } from "../common/ResizeableWrapper";
 
 const FooterSettings = () => {
   const {
@@ -49,35 +49,24 @@ export const Footer = ({
   padding?: number;
   children?: React.ReactNode;
 }) => {
-  const {
-    connectors: { connect, drag },
-    selected,
-  } = useNode((node) => ({
-    selected: node.events.selected,
-  }));
-
   return (
-    <footer
-      style={{
-        background,
-        padding: `${padding}px`,
-        width: "100%",
-        borderTop: "1px solid #ddd",
-        marginTop: "auto",
-        ...getSelectedStyle(selected),
-      }}
-      ref={(ref: HTMLElement | null) => {
-        if (ref) {
-          connect(drag(ref));
-        }
-      }}
-    >
-      <Container>
-        <Center>
-          <Element id="footer-text" is={Text} canvas text="Footer" />
-        </Center>
-      </Container>
-    </footer>
+    <ResizeableWrapper>
+      <footer
+        style={{
+          background,
+          padding: `${padding}px`,
+          width: "100%",
+          borderTop: "1px solid #ddd",
+          marginTop: "auto",
+        }}
+      >
+        <Container>
+          <Center>
+            <Element id="footer-text" is={Text} canvas text="Footer" />
+          </Center>
+        </Container>
+      </footer>
+    </ResizeableWrapper>
   );
 };
 

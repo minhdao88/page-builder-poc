@@ -18,9 +18,9 @@ import { Button } from "./user/Button";
 import { Text } from "./user/Text";
 import { Header } from "./user/Header";
 import { Footer } from "./user/Footer";
-import { Hero } from "./user/Hero";
 import { Image } from "./user/Image";
-import { FAQ } from './user/FAQ';
+import { FAQ } from "./user/FAQ";
+import { Section } from "./user/Section";
 
 const ToolboxItem = ({ icon, label, onClick, ref }: any) => (
   <div
@@ -97,7 +97,70 @@ export const Toolbox = () => {
               label="Hero Section"
               ref={(ref: HTMLDivElement | null) => {
                 if (ref) {
-                  connectors.create(ref, <Hero />);
+                  connectors.create(
+                    ref,
+                    <Section
+                      data={{
+                        type: "Hero",                        
+                        children: [
+                          {
+                            type: "Column",
+                            props: {
+                              cols: 2,
+                              gap: "md",
+                              spans: [
+                                { base: 12, sm: 6 },
+                                { base: 12, sm: 6 },
+                              ],
+                            },
+                            children: [
+                              {
+                                type: "Row",
+                                props: {
+                                  rows: 3,
+                                  gap: "lg",
+                                },
+                                children: [
+                                  {
+                                    type: "Text",
+                                    props: {
+                                      text: "Hero Title",
+                                      fontWeight: 700,
+                                      fontSize: 32,
+                                    },
+                                  },
+                                  {
+                                    type: "Text",
+                                    props: {
+                                      text: "This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.",
+                                      fontWeight: 600,
+                                      fontSize: 16,
+                                    },
+                                  },
+                                  {
+                                    type: "Button",
+                                    props: {
+                                      text: "Learn more",
+                                      width: 150,
+                                      height: 40,
+                                    },
+                                  },
+                                ],
+                              },
+                              {
+                                type: "Image",
+                                props: {
+                                  src: "https://placehold.co/400",
+                                  width: 350,
+                                  height: 350,
+                                },
+                              },
+                            ],
+                          },
+                        ],
+                      }}
+                    />
+                  );
                 }
               }}
             />
@@ -135,7 +198,7 @@ export const Toolbox = () => {
               label="Text"
               ref={(ref: HTMLDivElement | null) => {
                 if (ref) {
-                  connectors.create(ref, <Text text='Hello world'/>);
+                  connectors.create(ref, <Text text="Hello world" />);
                 }
               }}
             />

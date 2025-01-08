@@ -6,21 +6,18 @@ import { TextInput, Select, Stack } from "@mantine/core";
 import { ResizeableWrapper } from "../common/ResizeableWrapper";
 
 interface TextProps {
-  text: string;
-  fontSize: number;
-  fontWeight: number;
+  text?: string;
+  fontSize?: number;
+  fontWeight?: number;
   width?: number;
   height?: number;
   style?: React.CSSProperties;
-  bounds?: string | HTMLElement;
 }
 
 export const Text = ({
   text = "Text",
   fontSize = 16,
   fontWeight = 400,
-  width = 200,
-  height = 50,
   style = {},
 }: TextProps) => {
   const {
@@ -32,7 +29,7 @@ export const Text = ({
   const [editable, setEditable] = useState(false);
 
   return (
-    <ResizeableWrapper width={width} height={height} style={style}>
+    <ResizeableWrapper style={style}>
       <ContentEditable
         disabled={!editable}
         html={text}
@@ -54,7 +51,7 @@ export const Text = ({
   );
 };
 
-const TextSettings = () => {
+export const TextSettings = () => {
   const {
     actions: { setProp },
     fontSize,

@@ -11,12 +11,14 @@ import { Editor, Element, Frame } from "@craftjs/core";
 import { SettingsPanel } from "./SettingsPanel";
 import { Header } from "./user/Header";
 import { Footer } from "./user/Footer";
-import { Hero } from "./user/Hero";
 import { Image } from "./user/Image";
 import { FAQ } from "./user/FAQ";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { useDisclosure } from "@mantine/hooks";
 import { PreviewModal } from "./PreviewModal";
+import { Section } from "./user/Section";
+import { Row } from "./user/Row";
+import { Column } from "./user/Column";
 
 const PageEditor = () => {
   const [json, setJson] = useState(undefined);
@@ -47,9 +49,12 @@ const PageEditor = () => {
           CardBottom,
           Header,
           Footer,
-          Hero,
           Image,
           FAQ,
+          Section,
+          Row,
+          Column,
+          Fragment
         }}
       >
         <Topbar onPreview={open} />
@@ -72,7 +77,7 @@ const PageEditor = () => {
           <Grid.Col span={8} style={{ height: "100%" }} p="md">
             <Box id="craftjs-editor" style={{ height: "100%" }}>
               <Frame data={json}>
-                <Element is={Container} padding={5} canvas editable={false} />
+                <Element is={Container} canvas editable={false} />
               </Frame>
             </Box>
           </Grid.Col>

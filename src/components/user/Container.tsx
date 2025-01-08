@@ -12,7 +12,7 @@ interface ContainerProps {
   editable?: boolean;
 }
 
-const ContainerSettings = () => {
+export const ContainerSettings = () => {
   const {
     actions: { setProp },
     background,
@@ -71,9 +71,7 @@ export const Container = ({
         ...getSelectedStyle(editable && selected),
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-        {children}
-      </div>
+      {children}
     </Paper>
   );
 };

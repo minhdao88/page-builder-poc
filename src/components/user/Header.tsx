@@ -12,7 +12,7 @@ import { useNode, Element } from "@craftjs/core";
 import { Text } from "./Text";
 import { Image } from "./Image";
 import { ImageSettings } from "./Image";
-import { getSelectedStyle } from "./utils";
+import { ResizeableWrapper } from "../common/ResizeableWrapper";
 
 const HeaderSettings = () => {
   const {
@@ -69,42 +69,30 @@ export const Header = ({
   logoHeight?: number;
   children?: React.ReactNode;
 }) => {
-  const {
-    connectors: { connect, drag },
-    selected,
-  } = useNode((node) => ({
-    selected: node.events.selected,
-  }));
-
   return (
-    <header
-      style={{
-        background,
-        padding: `${padding}px`,
-        borderBottom: "1px solid #e9ecef",
-        ...getSelectedStyle(selected),
-      }}
-      ref={(ref: HTMLElement | null) => {
-        if (ref) {
-          connect(drag(ref));
-        }
-      }}
-    >
-      <Container size="lg">
+    <ResizeableWrapper>
+      <Container
+        size="lg"
+        style={{
+          background,
+          padding: `${padding}px`,
+          borderBottom: "1px solid #e9ecef",
+        }}
+      >
         <Group justify="space-between" h="100%">
           <Group>
             <Element
               is={Image}
               alt="Brand"
               id="logo"
-              imageUrl={logoUrl}
+              imageUrl={logoUrl ?? "https://placehold.co/400"}
               width={logoWidth}
               height={logoHeight}
             />
-            <Element 
-              is={Text} 
-              size="xl" 
-              fw={700} 
+            <Element
+              is={Text}
+              fontSize={24}
+              fontWeight={700}
               id="brandName"
               text={brandName}
             />
@@ -112,7 +100,7 @@ export const Header = ({
           <Group>{children}</Group>
         </Group>
       </Container>
-    </header>
+    </ResizeableWrapper>
   );
 };
 

@@ -4,7 +4,6 @@ export { Text } from "./Text";
 export { Container } from "./Container";
 export { Header } from "./Header";
 export { Footer } from "./Footer";
-export { Hero } from "./Hero";
 export { Image } from "./Image";
 export { FAQ } from "./FAQ";
 

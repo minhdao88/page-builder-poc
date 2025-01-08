@@ -16,7 +16,7 @@ interface ButtonProps {
   color?: string;
   variant?: string;
   size?: string;
-  children?: React.ReactNode;
+  text?: React.ReactNode;
   style?: React.CSSProperties;
   bounds?: string | HTMLElement;
 }
@@ -31,13 +31,13 @@ export const Button = ({ width, height, style, ...props }: ButtonProps) => {
           height: '100%',
         }}
       >
-        {props.children}
+        {props.text}
       </MantineButton>
     </ResizeableWrapper>
   );
 };
 
-const ButtonSettings = () => {
+export const ButtonSettings = () => {
   const {
     actions: { setProp },
     color,

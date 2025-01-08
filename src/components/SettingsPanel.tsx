@@ -23,7 +23,7 @@ export const SettingsPanel = () => {
       selected,
     };
   });
-
+  console.log('selected', selected);
   return selected ? (
     <Box mt={2} px={2} py={2}>
       <Box pb={2}>

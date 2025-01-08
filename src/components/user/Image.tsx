@@ -15,11 +15,11 @@ import { ResizeableWrapper } from "../common/ResizeableWrapper";
 export const ImageSettings = () => {
   const {
     actions: { setProp },
-    imageUrl,
+    src,
     width,
     height,
   } = useNode((node) => ({
-    imageUrl: node.data.props.imageUrl,
+    src: node.data.props.src,
     width: node.data.props.width,
     height: node.data.props.height,
   }));
@@ -30,8 +30,8 @@ export const ImageSettings = () => {
         <FileButton
           onChange={(file) => {
             if (file) {
-              const imageUrl = URL.createObjectURL(file);
-              setProp((props: any) => (props.imageUrl = imageUrl));
+              const src = URL.createObjectURL(file);
+              setProp((props: any) => (props.src = src));
             }
           }}
           accept="image/png,image/jpeg,image/gif"
@@ -43,7 +43,7 @@ export const ImageSettings = () => {
               leftSection={<IconUpload size={14} />}
               {...props}
             >
-              {imageUrl ? "Change Image" : "Upload Image"}
+              {src ? "Change Image" : "Upload Image"}
             </Button>
           )}
         </FileButton>
@@ -65,7 +65,7 @@ export const ImageSettings = () => {
 };
 
 interface ImageProps {
-  imageUrl?: string;
+  src?: string;
   alt?: string;
   width?: number;
   height?: number;
@@ -73,7 +73,7 @@ interface ImageProps {
 }
 
 export const Image = ({
-  imageUrl,
+  src,
   alt,
   width = 200,
   height = 200,
@@ -82,7 +82,7 @@ export const Image = ({
   return (
     <ResizeableWrapper width={width} height={height} style={style}>
       <MantineImage
-        src={imageUrl}
+        src={src}
         alt={alt}
         style={{
           width: "100%",
@@ -96,7 +96,7 @@ export const Image = ({
 
 Image.craft = {
   props: {
-    imageUrl: "https://placehold.co/400",
+    src: "https://placehold.co/400",
     alt: "Random image",
     width: 200,
     height: 200,
@@ -110,12 +110,11 @@ Image.craft = {
 
 Image.craft = {
   props: {
-    imageUrl: "https://placehold.co/400",
+    src: "https://placehold.co/400",
     alt: "Random image",
     width: 200,
     height: 200,
     style: {},
-    bounds: undefined,
   },
   related: {
     settings: ImageSettings,

@@ -9,7 +9,6 @@ import {
   CardBottom,
   Header,
   Footer,
-  Hero,
   Image,
   FAQ,
 } from "./user";
@@ -47,7 +46,6 @@ export const PreviewModal = ({ opened, onClose }: PreviewModalProps) => {
           CardBottom,
           Header,
           Footer,
-          Hero,
           Image,
           FAQ,
         }}
